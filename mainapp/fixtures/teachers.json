@@ -1,0 +1,16 @@
+[
+    {
+        "model": "mainapp.teachers",
+        "pk": 1,
+        "fields": {
+            "name": "Альфред",
+            "sname": "Нуцубидзе",
+            "birth_date": "1990-07-10",
+            "course": [
+                1
+            ],
+            "created": "2000-01-01",
+            "updated": "2000-01-01"   
+        }
+    }
+]
