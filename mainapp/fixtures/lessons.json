@@ -1,0 +1,15 @@
+[
+    {
+        "model": "mainapp.lessons",
+        "pk": 1,
+        "fields": {
+            "course_id": 1,
+            "num": 1,
+            "title": "Lesson 1",
+            "description": "Описание урока",
+            "description_as_markdown": false,
+            "created": "2000-01-01",
+            "updated": "2000-01-01"   
+        }
+    }
+]
