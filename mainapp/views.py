@@ -32,7 +32,7 @@ class ContactsPageView(TemplateView):
     template_name = "mainapp/contacts.html"
 
 class DocSitePageView(TemplateView):
-    template_name = "mainapp/docsite.html"
+    template_name = "mainapp/doc_site.html"
 
 class LoginPageView(TemplateView):
     template_name = "mainapp/login.html"
