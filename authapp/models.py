@@ -1,6 +1,9 @@
 from pathlib import Path
 from time import time
 
+from django.db.models import UniqueConstraint
+from django.db.models.functions import Lower
+
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.contrib.auth.validators import ASCIIUsernameValidator
@@ -13,9 +16,12 @@ def users_avatars_path(instance, filename):
     suff = Path(filename).suffix
     return "user_{0}/avatars/{1}".format(instance.username, f"pic_{num}{suff}")
 
+
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     username_validator = ASCIIUsernameValidator()
     
+    objects = UserManager()
+            
     username = models.CharField(
         _("username"),
         max_length=150,
@@ -57,9 +63,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     )
     
     date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
-    
-    objects = UserManager()
-    
+        
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ["email"]
@@ -67,6 +71,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _("user")
         verbose_name_plural = _("users")
+        constraints = [
+            UniqueConstraint(
+                Lower('username'),
+                name='lower_user_name_unique',
+            ),
+            ]
     
     def clean(self):
         super().clean()
@@ -81,4 +91,5 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
+        
         
