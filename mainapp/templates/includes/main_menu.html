@@ -16,7 +16,7 @@
                     <a class="nav-link" href="{% url 'mainapp:news' %}">Новости</a>
                 </li>
                 <li class="nav-item {% if request.resolver_match.view_name == 'mainapp:courses_list' %} active {% endif %}">
-                    <a class="nav-link" href="{% url 'mainapp:courses_list' %}">Курсы</a>
+                    <a class="nav-link" href="{% url 'mainapp:courses' %}">Курсы</a>
                 </li>
 
                 {% if user.is_authenticated %}
@@ -28,14 +28,12 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="ddProfile">
                 <a class="dropdown-item"
-                href="{% url 'authapp:profile_edit' %}">Редактировать
-                профиль</a>
+                href="{% url 'authapp:profile_edit' pk=request.user.pk %}">Редактировать профиль</a>
                 <a class="dropdown-item" href="#">Мои курсы</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Модерация</a>
                 {% if user.is_superuser %}
-                <a class="dropdown-item" href="#">Административный
-                раздел</a>
+                <a class="dropdown-item" href="{% url 'admin:index' %}">Административный раздел</a>
                 {% endif %}
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{% url 'authapp:logout' %}">Выход</a>
