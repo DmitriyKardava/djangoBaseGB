@@ -184,28 +184,45 @@ SOCIAL_AUTH_PIPELINE = [
     'social_core.pipeline.user.user_details',
 ]
 
-LOG_FILE = BASE_DIR / "log" / "main_log.log"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-LOGGING = { 
+SOCIAL_AUTH_PIPELINE = [
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+]
+
+LOG_FILE = BASE_DIR / "var" / "log" / "main_log.log"
+
+
+LOGGING = {
     "version": 1,
-    "disable_existing_loggers": False,
+    "disable_existing_loggers": False, 
     "formatters": {
-        "console": {
-            "format": "[%(asctime)s] %(levelname)s %(name)s (%(lineno)d) %(message)s"
-        },
+        "console": {"format": "[%(asctime)s] %(levelname)s %(name)s (%(lineno)d) %(message)s" },
     }, 
     "handlers": {
         "file": {
-            "level": "INFO",
-            "class": "logging.FileHandler", 
-            "filename": LOG_FILE, 
-            "formatter": "console",
+            # "level": "DEBUG",
+            "class": "logging.FileHandler", "filename": LOG_FILE, "formatter": "console",},
+        "console": {"class": "logging.StreamHandler", "formatter": "console"},
         },
-        "console": {"class": "logging.StreamHandler", "formatter": "console",},
-    },
     "loggers": {
-        "django": {"level": "INFO", "handlers": ["console"]},}, 
-    }
+    "django": {"level": "INFO", "handlers": ["console"]},
+    
+    "mainapp": {
+        "level": "DEBUG",
+        "handlers": ["file"], 
+    },
+}, 
+}
+
 
 CACHES = { 
     "default": {
@@ -217,4 +234,20 @@ CACHES = {
     } 
 }
 
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
 
+DEFAULT_FROM_EMAIL = env('SUPPORT_EMAIL')
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+SUPPORT_EMAIL = env('SUPPORT_EMAIL')
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend" 
+# EMAIL_FILE_PATH = "var/email-messages/"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
