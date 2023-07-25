@@ -29,8 +29,12 @@ SECRET_KEY = 'django-insecure-85o*n@fd^gsi9##6v9!zf1qu3sya(o_*qzsxnnqm^ycren9)_^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
+if DEBUG: 
+    INTERNAL_IPS = [
+        "127.0.0.1", 
+    ]
 
 # Application definition
 
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     "social_django",
     'mainapp',
     'authapp',
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -55,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -161,3 +167,36 @@ SOCIAL_AUTH_VK_OAUTH2_SECRET = env('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
 SOCIAL_AUTH_GITHUB_SCOPE = ['email']
+
+LOG_FILE = BASE_DIR / "log" / "main_log.log"
+
+LOGGING = { 
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "console": {
+            "format": "[%(asctime)s] %(levelname)s %(name)s (%(lineno)d) %(message)s"
+        },
+    }, 
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler", 
+            "filename": LOG_FILE, 
+            "formatter": "console",
+        },
+        "console": {"class": "logging.StreamHandler", "formatter": "console",},
+    },
+    "loggers": {
+        "django": {"level": "INFO", "handlers": ["console"]},}, 
+    }
+
+CACHES = { 
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache", 
+        "LOCATION": "redis://127.0.0.1:6379", 
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient", 
+        },
+    } 
+}
