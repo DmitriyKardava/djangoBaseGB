@@ -11,13 +11,15 @@
 {% endif %}
 <div class="row">
     <div class="col-lg-8">
-    {% for item in object_list %} <div class="card my-2">
-    <div class="card-body">
-    <h5 class="card-title">{{ item.title }}</h5> <h6 class="card-subtitle mb-2 text-muted">
-    {{ item.created|date:"Y-m-d h-i-s" }} </h6>
-    <p class="card-text">{{ item.preambule }}</p> <div class="row">
-    <div class="col">
-    <a href="{% url 'mainapp:news_detail' pk=item.pk %}"
+    {% for item in object_list %}
+    <div class="card my-2">
+        <div class="card-body">
+        <h5 class="card-title">{{ item.title }}</h5> 
+        <h6 class="card-subtitle mb-2 text-muted">{{ item.created|date:"Y-m-d h-i-s" }}</h6>
+        <p class="card-text">{{ item.preambule }}</p> 
+        <div class="row">
+            <div class="col">
+                <a href="{% url 'mainapp:news_detail' pk=item.pk %}"
     class="card-link">Подробнее</a> </div>
     {% if perms.mainapp.change_news %} <div class="col-1 text-center">
         <a href="{% url 'mainapp:news_update' pk=item.pk %}"> <i class="far fa-edit"></i>
@@ -54,11 +56,7 @@ class="btn btn-primary btn-block">Фильтровать</button>
 href="{% url 'mainapp:news_create' %}">Добавить новость</a> {% endif %}
 </div>
 </div>
-<div class="row justify-content-center align-items-center mt-3 mb-n3"> <nav aria-label="Page navigation example">
-<ul class="pagination">
-<li class="page-item"><a class="page-link" href="#">Previous</a></li> <li class="page-item"><a class="page-link" href="#">1</a></li>
-<li class="page-item"><a class="page-link" href="#">2</a></li>
-{# <li class="page-item"><a class="page-link" href="#">3</a></li> #} <li class="page-item"><a class="page-link" href="#">Next</a></li>
-</ul> </nav>
-</div>
+{% block pagination %}
+{% include 'includes/pagination.html' %}
+{% endblock pagination %}
 {% endblock content %}

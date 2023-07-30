@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -132,6 +133,8 @@ AUTHENTICATION_BACKENDS = (
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'ru-RU'
+
+LOCALE_PATHS = [BASE_DIR / "locale"]
 
 TIME_ZONE = 'UTC'
 
@@ -251,3 +254,5 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # EMAIL_FILE_PATH = "var/email-messages/"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+SELENIUM_DRIVER_PATH_CHROMIUM = BASE_DIR / "var" / "selenium" / "chromedriver"

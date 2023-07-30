@@ -49,33 +49,9 @@
   </div>
 </div>
 
-<!--pagination-->
-<div class="row justify-content-center align-items-center mt-3 mb-n3">
-<ul class="pagination justify-content-center flex-wrap mt-2 mb-4">
-  {% if page_obj.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
-  {% else %}
-      <li class="disabled page-item"><span class="page-link">&laquo;</span></li>
-  {% endif %}
-  {% for i in page_range|default_if_none:page_obj.paginator.get_elided_page_range %}
-      {% if page_obj.number == i %}
-          <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
-          </li>
-      {% else %}
-          {% if i == page_obj.paginator.ELLIPSIS %}
-              <li class="page-item"><span class="page-link">{{ i }}</span></li>
-          {% else %}
-              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-          {% endif %}
-      {% endif %}
-  {% endfor %}
-  {% if page_obj.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
-  {% else %}
-      <li class="disabled page-item"><span class="page-link">&raquo;</span></li>
-  {% endif %}
-</ul>
-</div>
+{% block pagination %}
+{% include 'includes/pagination.html' %}
+{% endblock pagination %}
 
 {% endblock content %}
 

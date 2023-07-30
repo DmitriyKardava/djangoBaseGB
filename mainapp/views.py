@@ -15,22 +15,16 @@ from mainapp import tasks as mainapp_tasks
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.core.cache import cache
-from django.views.decorators.cache import cache_page
 
 from django.contrib import messages
 import logging
-
-
 
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import FileResponse
 from django.conf import settings
 
-from django.views.decorators.cache import cache_page
 
 logger = logging.getLogger(__name__)
-
-
 
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
@@ -66,7 +60,7 @@ class NewsPageView(ListView):
     template_name = "mainapp/news.html"
     paginate_by = 5
 
-class CoursesPageView(ListView):
+class CoursesListView(ListView):
     template_name = "mainapp/courses_list.html"
     model=Courses
     paginate_by = 5
@@ -109,14 +103,6 @@ class DocSitePageView(TemplateView):
 class LoginPageView(TemplateView):
     template_name = "mainapp/login.html"
 
-
-class CoursesListView(TemplateView): 
-    template_name = "mainapp/courses_list.html"
-    
-    def get_context_data(self, **kwargs):
-        context = super(CoursesListView, self).get_context_data(**kwargs) 
-        context["objects"] = mainapp_models.Courses.objects.all()[:7] 
-        return context
 
 class CoursesDetailView(TemplateView): 
     template_name = "mainapp/courses_detail.html"
