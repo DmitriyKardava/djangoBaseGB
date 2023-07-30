@@ -254,3 +254,5 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 # EMAIL_FILE_PATH = "var/email-messages/"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+SELENIUM_DRIVER_PATH_CHROMIUM = BASE_DIR / "var" / "selenium" / "chromedriver"
