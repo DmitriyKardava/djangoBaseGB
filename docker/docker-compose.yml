@@ -1,0 +1,71 @@
+version: '3.8'
+services:
+  web:
+    build: ./app
+    container_name: braniac
+    volumes:
+      - /opt/braniac/app/djangoBaseGB:/app
+    command: gunicorn config.wsgi --bind 0.0.0.0:8000
+    expose:
+      - 8000
+    environment:
+      LANGUAGE: ru_RU.UTF-8
+      LANG: ru_RU.UTF-8
+      LC_ALL: ru_RU.UTF-8
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: braniac
+      POSTGRES_USER: braniac
+      POSTGRES_PASSWORD: masterkey
+      PGDATA: /pgdata
+    container_name: postgres
+    volumes:
+      - /opt/braniac/pgdata:/pgdata
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_LISTEN_PORT: 8080
+    ports:
+      - "8080:8080"
+
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    volumes:
+      - /opt/braniac/app/djangoBaseGB/static:/static
+      - /opt/braniac/app/djangoBaseGB/media:/media
+      - /opt/braniac/nginx/log:/var/log/nginx
+    ports:
+      - 80:80
+    depends_on:
+     - web
+
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    expose:
+      - 6379
+    command: redis-server --save 60 1
+
+  celery:
+    container_name: celery
+    build: ./app
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - /opt/braniac/app/djangoBaseGB:/app
+    environment:
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - CELERY_BROKER=redis://redis:6379/0
+      - CELERY_BACKEND=redis://redis:6379/0
+    depends_on:
+      - web
+      - redis 
