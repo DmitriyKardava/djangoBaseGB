@@ -27,13 +27,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-85o*n@fd^gsi9##6v9!zf1qu3sya(o_*qzsxnnqm^ycren9)_^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
 if DEBUG: 
     INTERNAL_IPS = [
-        "127.0.0.1", 
+        "127.0.0.1",
     ]
 
 # Application definition
@@ -63,7 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -95,8 +95,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'braniac',
+        'USER': 'braniac',
+        'PASSWORD': 'masterkey',
+	'HOST': 'postgres',
+	'PORT': 5432,
     }
 }
 
@@ -146,7 +150,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
@@ -230,15 +234,15 @@ LOGGING = {
 CACHES = { 
     "default": {
         "BACKEND": "django_redis.cache.RedisCache", 
-        "LOCATION": "redis://127.0.0.1:6379", 
+        "LOCATION": "redis://redis:6379", 
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient", 
         },
     } 
 }
 
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
 
 DEFAULT_FROM_EMAIL = env('SUPPORT_EMAIL')
 EMAIL_HOST = 'smtp.yandex.ru'
@@ -255,4 +259,7 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-SELENIUM_DRIVER_PATH_CHROMIUM = BASE_DIR / "var" / "selenium" / "chromedriver"
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
+if not DEBUG:
+    CSRF_TRUSTED_ORIGINS = ['http://braniac.hobri.ru', 'https://braniac.hobri.ru']
